@@ -1,0 +1,25 @@
+# Import libraries
+import requests
+from bs4 import BeautifulSoup
+import re
+import datetime
+import time
+# Collect first page of artists’ list
+page = requests.get('https://www.ragcomercio.com/search/1/quepe+de+amistr')
+# Create a BeautifulSoup object
+soup = BeautifulSoup(page.text, 'html.parser')
+x = 1
+while True:
+	# Pull all text from the BodyText div
+	price = soup.find(class_='label label-success')
+	price_string = str(price)
+	preco = re.sub('<span class="label label-success">',' ',price_string)
+	preco = re.sub('</span>','',preco)
+	print(preco)
+	data = datetime.datetime.now()
+	print(data)
+	with open("preco.txt", "a") as text_file:
+		print(f"{preco}", file=text_file);
+	with open("data.txt", "a") as text_file:
+		print(f"{data}", file=text_file)
+	time.sleep(60)
